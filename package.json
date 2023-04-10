@@ -1,0 +1,25 @@
+{
+  "name": "Radionica",
+  "version": "1.0.0",
+  "description": "Backend servis za projekt iz kolegija informacijski sustavi",
+  "main": "index.js",
+  "author": "Josip Jurenic",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "nocache": "^3.0.4",
+    "pg": "^8.10.0",
+    "prettier": "^2.8.7"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.1",
+    "nodemon": "^2.0.22"
+  }
+}
