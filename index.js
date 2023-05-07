@@ -5,7 +5,6 @@ const nocache = require("nocache");
 const { errorHandler } = require("./middleware/error.middleware");
 const { authRouter } = require("./controllers/auth.router");
 const { radRouter } = require("./controllers/rad.router");
-const { jwtSecure } = require("./middleware/jwt.middleware");
 
 dotenv.config();
 
@@ -29,7 +28,6 @@ app.use(
 );
 
 app.use(authRouter);
-app.use(jwtSecure);
 app.get("/", (req, res) => {
   res.json({ message: `Hello, ${req.headers.authorization}!` });
 });
