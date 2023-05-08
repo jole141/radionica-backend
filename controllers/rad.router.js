@@ -10,6 +10,19 @@ const {
   postProjekt,
   deleteProjekt,
   putProjekt,
+  pridijeliStrojProjektu,
+  pridijeliAlatProjektu,
+  pridijeliDioProjektu,
+  getAlat,
+  getAlati,
+  postAlat,
+  deleteAlat,
+  putAlat,
+  getStroj,
+  getStrojevi,
+  postStroj,
+  deleteStroj,
+  putStroj,
 } = require("../datasource");
 
 const radRouter = Router();
@@ -47,6 +60,83 @@ radRouter.get("/dijelovi/:id", async (req, res, next) => {
   res.status(200).json(dio);
 });
 
+
+
+
+
+radRouter.get("/alati", async (req, res, next) => {
+  const alati = await getAlati();
+  res.status(200).json(alati);
+});
+
+radRouter.post("/alati", async (req, res, next) => {
+  const alat = req.body;
+  await postAlat(alat);
+  res.status(201).json({ message: "alat added" });
+});
+
+radRouter.delete("/alati/:id", async (req, res, next) => {
+  const id = req.params.id;
+  await deleteAlat(id);
+  res.status(200).json({ message: "alat deleted" });
+});
+
+radRouter.put("/alati/:id", async (req, res, next) => {
+  const alat = req.body;
+  const id = req.params.id;
+  await putAlat(alat, id);
+  res.status(200).json({ message: "alat updated" });
+});
+
+radRouter.get("/alati/:id", async (req, res, next) => {
+  const id = req.params.id;
+  const alat = await getAlat(id);
+  if (!alat) {
+    return res.status(404).json({ error: "alat not found" });
+  }
+  res.status(200).json(alat);
+});
+
+
+
+
+radRouter.get("/strojevi", async (req, res, next) => {
+  const strojevi = await getStrojevi();
+  res.status(200).json(strojevi);
+});
+
+radRouter.post("/strojevi", async (req, res, next) => {
+  const stroj = req.body;
+  await postStroj(stroj);
+  res.status(201).json({ message: "stroj added" });
+});
+
+radRouter.delete("/strojevi/:id", async (req, res, next) => {
+  const id = req.params.id;
+  await deleteStroj(id);
+  res.status(200).json({ message: "stroj deleted" });
+});
+
+radRouter.put("/strojevi/:id", async (req, res, next) => {
+  const stroj = req.body;
+  const id = req.params.id;
+  await putStroj(stroj, id);
+  res.status(200).json({ message: "stroj updated" });
+});
+
+radRouter.get("/strojevi/:id", async (req, res, next) => {
+  const id = req.params.id;
+  const stroj = await getStroj(id);
+  if (!stroj) {
+    return res.status(404).json({ error: "stroj not found" });
+  }
+  res.status(200).json(stroj);
+});
+
+
+
+
+
 radRouter.get("/projekti", async (req, res, next) => {
   const projekti = await getProjekti();
   res.status(200).json(projekti);
@@ -79,5 +169,33 @@ radRouter.put("/projekti/:id", async (req, res, next) => {
   await putProjekt(projekt, id);
   res.status(200).json({ message: "projekt updated" });
 });
+
+radRouter.post("/projekti/stroj", async(req, res, next) => {
+  const koristenje = req.body;
+  await pridijeliStrojProjektu(koristenje);
+  res.status(200).json({ message: "stroj assigned to projekt" });
+})
+
+radRouter.post("/projekti/alat", async(req, res, next) => {
+  const koristenje = req.body;
+  const alat = await getAlat(koristenje.sifraAlata);
+  if(alat.kolicina_na_lageru<koristenje.kolicinaAlata){
+    res.status(400).json({ message: "not enough alata on lager"});
+    return;
+  }
+  await pridijeliAlatProjektu(koristenje);
+  res.status(200).json({ message: "alat assigned to projekt" });
+})
+
+radRouter.post("/projekti/dio", async(req, res, next) => {
+  const koristenje = req.body;
+  const dio = await getDio(koristenje.sifraDijela);
+  if(dio.kolicina_na_lageru<koristenje.kolicinaDijelova){
+    res.status(400).json({ message: "not enough dijelova on lager"});
+    return;
+  }
+  await pridijeliDioProjektu(koristenje);
+  res.status(200).json({ message: "dio assigned to projekt" });
+})
 
 module.exports = { radRouter };
