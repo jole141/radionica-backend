@@ -6,7 +6,8 @@
   "author": "Josip Jurenic",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "db_test": "node ./DB_TEST/db_test.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
