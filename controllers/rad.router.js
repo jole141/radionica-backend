@@ -204,11 +204,17 @@ radRouter.post("/projekti/dio", async (req, res, next) => {
 
 radRouter.put("/projekti/dio/edit", async (req, res, next) => {
   const koristenje = req.body;
-
-  console.log(koristenje);
   const dio = await getDio(koristenje.sifraDijela);
-  console.log(dio);
-  if (dio.kolicina_na_lageru < koristenje.kolicinaDijelova) {
+  const projekt = await getProjekt(koristenje.sifraProjekta);
+  const dioProjekta = projekt.dijelovi.find(
+    (dioProjekta) => dioProjekta.sifra_dijela === koristenje.sifraDijela
+  );
+  // s obzirom da uredujemo moramo uzeti trenutno stanje na lageru i kolicinu koju trenutno imamo
+  // to usporedimo s novom kolicinom koju zelimo dodati
+  if (
+    dio.kolicina_na_lageru + dioProjekta.kolicina_dijelova <
+    koristenje.kolicinaDijelova
+  ) {
     res.status(400).json({ message: "not enough dijelova on lager" });
     return;
   }
