@@ -3,7 +3,7 @@ const request = require('supertest');
 const { app } = require('../index');
 
 describe('Unit tests for your Express routes', () => {
-  it('should return dijelovi from the datasource', async () => {
+  it('should return dijelovi from the datasource', (done) => {
     request(app)
       .get('/dijelovi')
       .expect(200)
@@ -46,10 +46,11 @@ describe('Unit tests for your Express routes', () => {
   it('should update a dio in the datasource', (done) => {
     const id = 1;
     const dio = {
-      sifra_dijela: '1',
-      naziv_dijela: "Motorić",
-      kolicina_na_lageru: 22
+      nazivDio: "Motorić mali",
+      kolicinaNaLageru: 22
     };
+
+    const dioTrazeni = request(app).get(`/dijelovi/${id}`).end();
 
     request(app)
       .put(`/dijelovi/${id}`)
