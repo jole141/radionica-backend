@@ -191,9 +191,7 @@ radRouter.post("/projekti/alat", async (req, res, next) => {
 radRouter.post("/projekti/dio", async (req, res, next) => {
   const koristenje = req.body;
 
-  console.log(koristenje);
   const dio = await getDio(koristenje.sifraDijela);
-  console.log(dio);
   if (dio.kolicina_na_lageru < koristenje.kolicinaDijelova) {
     res.status(400).json({ message: "not enough dijelova on lager" });
     return;

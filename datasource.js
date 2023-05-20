@@ -170,9 +170,7 @@ const postProjekt = async (projekt) => {
 
 const deleteProjekt = async (id) => {
   const projekt = await getProjekt(id);
-  console.log(projekt);
   for (let i = 0; i < projekt.dijelovi.length; i++) {
-    console.log("DATA => " + JSON.stringify(projekt.dijelovi[i]));
     await ukloniDioIzProjekta({
       sifraDijela: projekt.dijelovi[i].sifra_dijela,
       sifraProjekta: id,
@@ -327,14 +325,11 @@ const ukloniDioIzProjekta = async (koristenje) => {
       "SELECT * FROM dijelovi_projekt WHERE sifra_dijela = $1 AND sifra_projekta = $2;",
       [koristenje.sifraDijela, koristenje.sifraProjekta]
     );
-    console.log("1");
     const results2 = await pool.query(
       "SELECT * FROM dio WHERE sifra_dijela = $1;",
       [koristenje.sifraDijela]
     );
-    console.log("2");
     const dio = results2.rows[0];
-    console.log(dio);
     await pool.query(
       "UPDATE dio SET kolicina_na_lageru = $1 WHERE sifra_dijela = $2;",
       [
@@ -343,7 +338,6 @@ const ukloniDioIzProjekta = async (koristenje) => {
         koristenje.sifraDijela,
       ]
     );
-    console.log("3");
     await pool.query(
       "DELETE FROM dijelovi_projekt WHERE sifra_dijela = $1 AND sifra_projekta = $2;",
       [koristenje.sifraDijela, koristenje.sifraProjekta]
